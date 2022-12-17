@@ -22,7 +22,6 @@ const news: Module<INewsState, IState> = {
   },
   getters: {
     getNews(state: INewsState) {
-      console.log(state);
       return state.data;
     },
   },
@@ -50,8 +49,34 @@ const news: Module<INewsState, IState> = {
     },
     async addNews(context, { title, text }: { title: string; text: string }) {
       try {
-        console.log(title, text);
         getAPI.post(`/api/news/`, { title: title, text: text });
+        this.dispatch('getAllNews');
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async updateNews(
+      context,
+      {
+        id,
+        title,
+        text,
+        imageSrc,
+      }: { id: number; title: string; text: string; imageSrc: string }
+    ) {
+      try {
+        getAPI.put(`/api/news/${id}`, {
+          title: title,
+          text: text,
+          image_src: imageSrc,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async deleteNews(context, id: number) {
+      try {
+        getAPI.delete(`/api/news/${id}/`);
         this.dispatch('getAllNews');
       } catch (err) {
         console.log(err);

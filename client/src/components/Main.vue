@@ -38,10 +38,12 @@ export default defineComponent({
 .main {
   max-width: 1440px;
   width: 100%;
+  padding: 20px 120px;
   &__latest {
     display: grid;
     grid-template-rows: auto auto;
     grid-template-columns: repeat(3, auto);
+    gap: 10px;
   }
 }
 </style>
