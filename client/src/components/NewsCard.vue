@@ -1,7 +1,6 @@
 <template>
   <div class="card">
-    <button class="deleteButton">delete</button>
-    <button class="editButton" @click="editNews">edit</button>
+    <img class="card__image" :src="image_src" @click="openNews" />
     <TextWrapper
       :fontFamily="'libreFranklin'"
       :fontSize="10"
@@ -33,12 +32,14 @@ export default defineComponent({
     id: Number,
     title: String,
     text: String,
-    imageSrc: String,
+    image_src: String,
   },
   methods: {
-    ...mapActions({}),
-    editNews() {
-      this.$router.push('newsEdit/' + this.id);
+    ...mapActions({
+      deleteNews: 'deleteNews',
+    }),
+    openNews() {
+      this.$router.push('newsPage/' + this.id);
     },
   },
 });
@@ -49,6 +50,12 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   position: relative;
+  gap: 10px;
+  &__image {
+    cursor: pointer;
+    height: 255px;
+    object-fit: cover;
+  }
 }
 
 .deleteButton {

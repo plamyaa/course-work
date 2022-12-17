@@ -6,6 +6,7 @@ export interface INewsItem {
   id: number;
   title: string;
   text: string;
+  image_src: string;
   publish_date: Date;
   update_date?: Date;
 }
@@ -47,9 +48,20 @@ const news: Module<INewsState, IState> = {
         console.log(err);
       }
     },
-    async addNews(context, { title, text }: { title: string; text: string }) {
+    async addNews(
+      context,
+      {
+        title,
+        text,
+        image_src,
+      }: { title: string; text: string; image_src: string }
+    ) {
       try {
-        getAPI.post(`/api/news/`, { title: title, text: text });
+        getAPI.post(`/api/news/`, {
+          title: title,
+          text: text,
+          image_src: image_src,
+        });
         this.dispatch('getAllNews');
       } catch (err) {
         console.log(err);
@@ -61,14 +73,14 @@ const news: Module<INewsState, IState> = {
         id,
         title,
         text,
-        imageSrc,
-      }: { id: number; title: string; text: string; imageSrc: string }
+        image_src,
+      }: { id: number; title: string; text: string; image_src: string }
     ) {
       try {
         getAPI.put(`/api/news/${id}`, {
           title: title,
           text: text,
-          image_src: imageSrc,
+          image_src: image_src,
         });
       } catch (err) {
         console.log(err);

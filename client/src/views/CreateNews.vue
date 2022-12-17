@@ -14,7 +14,6 @@
           type="text"
           id="title"
           placeholder="Заголовок..."
-          required="true"
           maxlength="100"
           v-model="title"
         />
@@ -30,9 +29,8 @@
           class="form__input"
           type="text"
           id="title"
-          required="true"
           placeholder="Ссылка на главное изображение..."
-          v-model="imageSrc"
+          v-model="image_src"
         />
       </label>
       <label class="form__label" for="title">
@@ -41,7 +39,6 @@
           id="title"
           placeholder="Текст новости..."
           rows="20"
-          required="true"
           v-model="text"
         />
       </label>
@@ -68,17 +65,18 @@ export default defineComponent({
       id: 0,
       title: '',
       text: '',
-      imageSrc: '',
+      image_src: '',
     };
   },
   async mounted() {
     const id = Number(this.$route.params.id);
+    if (!id) return;
     const response = await this.getNews(id);
-    const { title, text, imageSrc } = response;
+    const { title, text, image_src } = response;
     this.id = id;
     this.title = title;
     this.text = text;
-    this.imageSrc = imageSrc;
+    this.image_src = image_src;
   },
   computed: {
     titleLen(): number {
@@ -87,26 +85,36 @@ export default defineComponent({
     output(): string {
       return marked(this.text);
     },
+    isFieldsHasEmpty() {
+      if (!this.title || !this.image_src || !this.text) {
+        alert('Заполните все поля!');
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
     ...mapActions(['addNews', 'getNews', 'updateNews']),
     createNews() {
+      if (this.isFieldsHasEmpty) return;
       this.addNews({
         title: this.title,
         text: this.text,
-        image_src: this.imageSrc,
+        image_src: this.image_src,
       });
       this.$router.push('/');
     },
     editNews() {
+      if (this.isFieldsHasEmpty) return;
       this.updateNews({
         id: this.id,
         title: this.title,
         text: this.text,
-        imageSrc: this.imageSrc,
+        image_src: this.image_src,
       });
       this.$router.push('/');
     },
+
     // update(e: Event) {
     //   const target = e.target as HTMLTextAreaElement;
     //   this.text = target.value;
