@@ -32,7 +32,7 @@
           id="title"
           required="true"
           placeholder="Ссылка на главное изображение..."
-          v-model="photo"
+          v-model="imageSrc"
         />
       </label>
       <label class="form__label" for="title">
@@ -45,9 +45,12 @@
           v-model="text"
         />
       </label>
-      <MainButton class="form__submit" @click="createNews"
-        >Создать новость</MainButton
-      >
+      <MainButton v-if="id === 0" class="form__submit" @click="createNews">
+        Создать новость
+      </MainButton>
+      <MainButton v-else class="form__submit" @click="editNews">
+        Редактивароать новость
+      </MainButton>
     </form>
     <div v-html="output" class="create-news__output"></div>
   </div>
@@ -62,10 +65,20 @@ export default defineComponent({
   name: 'CreateNews',
   data() {
     return {
+      id: 0,
       title: '',
       text: '',
-      photo: '',
+      imageSrc: '',
     };
+  },
+  async mounted() {
+    const id = Number(this.$route.params.id);
+    const response = await this.getNews(id);
+    const { title, text, imageSrc } = response;
+    this.id = id;
+    this.title = title;
+    this.text = text;
+    this.imageSrc = imageSrc;
   },
   computed: {
     titleLen(): number {
@@ -76,9 +89,22 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(['addNews']),
+    ...mapActions(['addNews', 'getNews', 'updateNews']),
     createNews() {
-      this.addNews({ title: this.title, text: this.text });
+      this.addNews({
+        title: this.title,
+        text: this.text,
+        image_src: this.imageSrc,
+      });
+      this.$router.push('/');
+    },
+    editNews() {
+      this.updateNews({
+        id: this.id,
+        title: this.title,
+        text: this.text,
+        imageSrc: this.imageSrc,
+      });
       this.$router.push('/');
     },
     // update(e: Event) {

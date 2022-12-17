@@ -11,6 +11,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'newsCreate',
     component: () => import('@/views/CreateNews.vue'),
   },
+  {
+    path: '/newsEdit/:id',
+    name: 'newsEdit',
+    component: () => import('@/views/CreateNews.vue'),
+    props: true,
+  },
 ];
 
 const router = createRouter({
