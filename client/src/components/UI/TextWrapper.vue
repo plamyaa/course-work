@@ -1,5 +1,5 @@
 <template>
-  <div :class="fontFamily" :style="styleObject">
+  <div class="link" :class="fontFamily" :style="styleObject">
     <slot />
   </div>
 </template>
@@ -19,10 +19,10 @@ export default defineComponent({
   data() {
     return {
       styleObject: {
-        fontSize: this.fontSize === undefined ? '20px' : this.fontSize + 'px',
-        fontStyle: this.color === undefined ? 'normal' : this.fontStyle,
-        fontWeight: this.fontWeight === undefined ? 400 : this.fontWeight,
-        color: this.color === undefined ? '#000000' : this.color,
+        fontSize: (this.fontSize ?? 20) + 'px',
+        fontStyle: this.fontStyle ?? 'normal',
+        fontWeight: this.fontWeight ?? 400,
+        color: this.color ?? '#000000',
       },
     };
   },
@@ -30,11 +30,14 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin&family=Tenor+Sans&display=swap');
 .tenorSans {
   font-family: 'Tenor Sans', sans-serif;
 }
 .libreFranklin {
   font-family: 'Libre Franklin', sans-serif;
+}
+
+a {
+  text-decoration: none;
 }
 </style>
