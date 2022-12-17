@@ -14,8 +14,9 @@
           type="text"
           id="title"
           placeholder="Заголовок..."
-          v-model="title"
+          required="true"
           maxlength="100"
+          v-model="title"
         />
         <TextWrapper
           :fontFamily="'libreFranklin'"
@@ -29,8 +30,9 @@
           class="form__input"
           type="text"
           id="title"
-          v-model="photo"
+          required="true"
           placeholder="Ссылка на главное изображение..."
+          v-model="photo"
         />
       </label>
       <label class="form__label" for="title">
@@ -39,10 +41,13 @@
           id="title"
           placeholder="Текст новости..."
           rows="20"
+          required="true"
           v-model="text"
         />
       </label>
-      <MainButton class="form__submit">Создать новость</MainButton>
+      <MainButton class="form__submit" @click="createNews"
+        >Создать новость</MainButton
+      >
     </form>
     <div v-html="output" class="create-news__output"></div>
   </div>
@@ -51,6 +56,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { marked } from 'marked';
+import { mapActions } from 'vuex';
 
 export default defineComponent({
   name: 'CreateNews',
@@ -62,14 +68,19 @@ export default defineComponent({
     };
   },
   computed: {
-    titleLen() {
+    titleLen(): number {
       return this.title.length;
     },
-    output() {
+    output(): string {
       return marked(this.text);
     },
   },
   methods: {
+    ...mapActions(['addNews']),
+    createNews() {
+      this.addNews({ title: this.title, text: this.text });
+      this.$router.push('/');
+    },
     // update(e: Event) {
     //   const target = e.target as HTMLTextAreaElement;
     //   this.text = target.value;

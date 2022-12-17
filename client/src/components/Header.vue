@@ -1,7 +1,11 @@
 <template>
   <header class="header">
-    <TextWrapper class="header__logo" :fontFamily="'tenorSans'" :fontSize="24">
-      <a>SNEAKER FORCE</a>
+    <TextWrapper
+      class="header__logo-wrapper"
+      :fontFamily="'tenorSans'"
+      :fontSize="24"
+    >
+      <router-link class="header__logo" to="/">SNEAKER FORCE</router-link>
     </TextWrapper>
     <nav class="header__nav">
       <TextWrapper
@@ -69,6 +73,10 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: space-between;
+  &__logo {
+    text-decoration: none;
+    color: #000000;
+  }
   &__nav {
     display: flex;
     gap: 28px;
