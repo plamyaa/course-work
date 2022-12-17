@@ -7,6 +7,7 @@
         :id="item.id"
         :title="item.title"
         :text="item.text"
+        :image_src="item.image_src"
       />
     </div>
   </main>
@@ -42,8 +43,9 @@ export default defineComponent({
   &__latest {
     display: grid;
     grid-template-rows: auto auto;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(3, calc((100% - 20px) / 3));
     gap: 10px;
+    row-gap: 50px;
   }
 }
 </style>
