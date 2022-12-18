@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'news',
     'rest_framework',
     'corsheaders',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
