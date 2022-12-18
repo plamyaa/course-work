@@ -77,11 +77,13 @@ const news: Module<INewsState, IState> = {
       }: { id: number; title: string; text: string; image_src: string }
     ) {
       try {
-        getAPI.put(`/api/news/${id}`, {
+        getAPI.put(`/api/news/${id}/`, {
           title: title,
           text: text,
           image_src: image_src,
+          update_date: new Date(),
         });
+        this.dispatch('getAllNews');
       } catch (err) {
         console.log(err);
       }

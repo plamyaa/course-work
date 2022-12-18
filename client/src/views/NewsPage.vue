@@ -9,8 +9,9 @@
       :fontWight="700"
       :fontFamily="'tenorSans'"
       :fontSize="36"
-      >{{ title }}</TextWrapper
     >
+      {{ title }}
+    </TextWrapper>
     <img :src="image_src" />
     <div v-html="output" class="news-page__text"></div>
   </div>
