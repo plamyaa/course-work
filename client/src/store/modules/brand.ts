@@ -22,6 +22,13 @@ const brand: Module<IBrandState, IState> = {
     getBrand(state: IBrandState) {
       return state.data;
     },
+    getBrandById: (state: IBrandState) => (id: number) => {
+      const brand = state.data.find((brand) => brand.id === id);
+      return brand?.brand;
+    },
+    getBrandByLength: (state: IBrandState) => (len: number) => {
+      return state.data.slice(0, len);
+    },
   },
   mutations: {
     addBrand(state: IBrandState, payload: IBrandItem[]) {
@@ -32,7 +39,6 @@ const brand: Module<IBrandState, IState> = {
     async read() {
       try {
         const response = await getAPI.get('/api/brand/');
-        console.log(response.data);
         this.commit('brand/addBrand', response.data);
       } catch (err) {
         console.log(err);

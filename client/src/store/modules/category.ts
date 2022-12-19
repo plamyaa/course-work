@@ -22,6 +22,9 @@ const category: Module<ICategoryState, IState> = {
     getCategory(state: ICategoryState) {
       return state.data;
     },
+    getCategoryByLength: (state: ICategoryState) => (len: number) => {
+      return state.data.slice(0, len);
+    },
   },
   mutations: {
     addCategory(state: ICategoryState, payload: ICategoryItem[]) {
@@ -32,7 +35,6 @@ const category: Module<ICategoryState, IState> = {
     async read() {
       try {
         const response = await getAPI.get('/api/category/');
-        console.log(response.data);
         this.commit('category/addCategory', response.data);
       } catch (err) {
         console.log(err);

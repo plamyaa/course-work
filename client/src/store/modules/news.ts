@@ -29,6 +29,12 @@ const news: Module<INewsState, IState> = {
     getNews(state: INewsState) {
       return state.data;
     },
+    getNewsById: (state: INewsState) => (id: number) => {
+      return state.data.find((news) => news.id === id);
+    },
+    getLastNews(state: INewsState) {
+      return state.data[state.data.length - 1];
+    },
   },
   mutations: {
     addNews(state: INewsState, payload: INewsItem[]) {
@@ -39,8 +45,8 @@ const news: Module<INewsState, IState> = {
     async read() {
       try {
         const response = await getAPI.get('/api/news/');
-        console.log(response.data);
         this.commit('news/addNews', response.data);
+        this.commit('setLoad', false);
       } catch (err) {
         console.log(err);
       }

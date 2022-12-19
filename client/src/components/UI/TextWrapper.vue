@@ -1,5 +1,5 @@
 <template>
-  <div class="link" :class="fontFamily" :style="styleObject">
+  <div class="text-wrapper" :class="fontFamily" :style="styleObject">
     <slot />
   </div>
 </template>
@@ -35,9 +35,5 @@ export default defineComponent({
 }
 .libreFranklin {
   font-family: 'Libre Franklin', sans-serif;
-}
-
-a {
-  text-decoration: none;
 }
 </style>
