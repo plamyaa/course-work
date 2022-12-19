@@ -33,6 +33,16 @@
           v-model="image_src"
         />
       </label>
+      <div class="form__selectors">
+        <select class="form__input">
+          <option>1</option>
+          <option>2</option>
+        </select>
+        <select class="form__input">
+          <option>1</option>
+          <option>2</option>
+        </select>
+      </div>
       <label class="form__label" for="title">
         <textarea
           class="form__input"
@@ -66,17 +76,21 @@ export default defineComponent({
       title: '',
       text: '',
       image_src: '',
+      collection: '',
+      brand: '',
     };
   },
   async mounted() {
     const id = Number(this.$route.params.id);
     if (!id) return;
     const response = await this.getNews(id);
-    const { title, text, image_src } = response;
+    const { title, text, image_src, collection, brand } = response;
     this.id = id;
     this.title = title;
     this.text = text;
     this.image_src = image_src;
+    this.collection = collection;
+    this.brand = brand;
   },
   computed: {
     titleLen(): number {
@@ -94,7 +108,11 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(['addNews', 'getNews', 'updateNews']),
+    ...mapActions({
+      addNews: 'news/create',
+      getNews: 'news/readById',
+      updateNews: 'news/update',
+    }),
     createNews() {
       if (this.isFieldsHasEmpty) return;
       this.addNews({
@@ -131,34 +149,38 @@ export default defineComponent({
   padding: 20px 120px;
   display: grid;
   grid-template-columns: 35% 65%;
-  gap: 60px;
+  column-gap: 55px;
   &__output {
+    width: calc(100% - 55px);
     overflow-wrap: break-word;
     background: #fff;
     padding: 10px;
     box-shadow: inset 0px 3px 4px 1px rgba(0, 0, 0, 0.25);
     border-radius: 6px;
     font-family: 'Nunito', sans-serif;
-    max-height: 600px;
+    height: 615px;
     overflow: scroll;
   }
 }
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 17px;
   &__label {
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     display: grid;
     grid-template-columns: 100% auto;
     width: 100%;
   }
+  &__selectors {
+    display: flex;
+    gap: 15px;
+  }
   &__input {
-    min-height: 53px;
     max-height: 360px;
     width: 100%;
-    padding: 19px 25px;
+    padding: 13px 10px;
     background: #ffffff;
     box-shadow: inset 0px 3px 4px 1px rgba(0, 0, 0, 0.25);
     border: 0;

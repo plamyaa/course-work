@@ -2,12 +2,14 @@
   <main class="main">
     <div class="main__latest">
       <NewsCard
-        v-for="item in news"
+        v-for="item in getNews"
         :key="item.id"
         :id="item.id"
         :title="item.title"
         :text="item.text"
         :image_src="item.image_src"
+        :brand_id="item.brand_id"
+        :author_id="item.author_id"
       />
     </div>
   </main>
@@ -16,7 +18,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import NewsCard from './NewsCard.vue';
+import NewsCard from './MainCard.vue';
 
 export default defineComponent({
   components: { NewsCard },
@@ -25,11 +27,11 @@ export default defineComponent({
     this.getAllNews();
   },
   methods: {
-    ...mapActions(['getAllNews']),
+    ...mapActions({ getAllNews: 'news/read' }),
   },
   computed: {
     ...mapGetters({
-      news: 'getNews',
+      getNews: 'news/getNews',
     }),
   },
 });

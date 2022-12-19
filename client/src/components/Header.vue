@@ -39,9 +39,9 @@
           :fontSize="14"
           :fontWeight="700"
         >
-          <router-link class="header__link" to="/newsCreate"
-            >Добавить статью</router-link
-          >
+          <router-link class="header__link" to="/newsCreate">
+            Добавить статью
+          </router-link>
         </TextWrapper>
       </div>
     </nav>

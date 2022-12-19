@@ -43,7 +43,7 @@ export default defineComponent({
     this.image_src = image_src;
   },
   methods: {
-    ...mapActions(['getNews', 'deleteNews']),
+    ...mapActions({ getNews: 'news/readById', deleteNews: 'news/delete' }),
     editNews() {
       this.$router.push('/newsEdit/' + this.id);
     },

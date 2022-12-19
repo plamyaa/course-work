@@ -7,7 +7,7 @@
       :fontStyle="'italic'"
       :fontWeight="700"
     >
-      <p>Asics</p>
+      {{ brand }}
     </TextWrapper>
     <TextWrapper>
       {{ title }}
@@ -17,7 +17,7 @@
       :fontSize="10"
       :fontStyle="'italic'"
     >
-      By Author
+      {{ author_id }}
     </TextWrapper>
   </div>
 </template>
@@ -27,17 +27,27 @@ import { defineComponent } from 'vue';
 import { mapActions } from 'vuex';
 
 export default defineComponent({
-  name: 'NewsCard',
+  name: 'MainCard',
   props: {
     id: Number,
     title: String,
     text: String,
     image_src: String,
+    brand_id: Number,
+    author_id: Number,
+  },
+  data() {
+    return {
+      brand: '',
+      author: '',
+    };
+  },
+  async mounted() {
+    const brandResponse = await this.getBrand(this.id);
+    this.brand = brandResponse.brand;
   },
   methods: {
-    ...mapActions({
-      deleteNews: 'deleteNews',
-    }),
+    ...mapActions({ getBrand: 'brand/readById', deleteNews: 'news/delete' }),
     openNews() {
       this.$router.push('newsPage/' + this.id);
     },

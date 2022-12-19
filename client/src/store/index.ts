@@ -1,8 +1,15 @@
 import { createStore } from 'vuex';
 import news, { INewsState } from './modules/news';
+import brand, { IBrandState } from './modules/brand';
+import collection, { ICollectionState } from './modules/collection';
+import category, { ICategoryState } from './modules/category';
+
 export interface IState {
   isAuth: boolean;
   news: INewsState;
+  brand: IBrandState;
+  collection: ICollectionState;
+  category: ICategoryState;
 }
 
 export default createStore({
@@ -20,5 +27,5 @@ export default createStore({
     },
   },
   actions: {},
-  modules: { news },
+  modules: { news, collection, brand, category },
 });
