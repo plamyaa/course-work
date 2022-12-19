@@ -10,18 +10,26 @@ export interface IState {
   brand: IBrandState;
   collection: ICollectionState;
   category: ICategoryState;
+  loaded: boolean;
 }
 
 export default createStore({
   state: {
     isAuth: true,
+    loaded: false,
   } as IState,
   getters: {
+    getLoad(state: IState) {
+      return state.loaded;
+    },
     getAuth(state: IState) {
       return state.isAuth;
     },
   },
   mutations: {
+    setLoad(state: IState, load: boolean) {
+      state.loaded = load;
+    },
     setAuth(state: IState, auth: boolean) {
       state.isAuth = auth;
     },

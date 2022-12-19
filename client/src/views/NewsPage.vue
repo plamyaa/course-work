@@ -1,19 +1,24 @@
 <template>
   <div class="news-page">
-    <div class="news-page__buttons" v-if="isAuth">
-      <MainButton @click="editNews">Редактировать новость</MainButton>
-      <MainButton @click="deleteConfirm"> Удалить новость </MainButton>
+    <div class="news-page__container">
+      <div class="news-page__content">
+        <div class="news-page__buttons" v-if="isAuth">
+          <MainButton @click="editNews">Редактировать новость</MainButton>
+          <MainButton @click="deleteConfirm"> Удалить новость </MainButton>
+        </div>
+        <TextWrapper
+          class="news-page__title"
+          :fontWight="700"
+          :fontFamily="'tenorSans'"
+          :fontSize="36"
+        >
+          {{ title }}
+        </TextWrapper>
+        <img :src="image_src" />
+        <div v-html="output" class="news-page__text"></div>
+      </div>
+      <div class="news-page__side"></div>
     </div>
-    <TextWrapper
-      class="news-page__title"
-      :fontWight="700"
-      :fontFamily="'tenorSans'"
-      :fontSize="36"
-    >
-      {{ title }}
-    </TextWrapper>
-    <img :src="image_src" />
-    <div v-html="output" class="news-page__text"></div>
   </div>
 </template>
 
@@ -32,11 +37,11 @@ export default defineComponent({
       image_src: '',
     };
   },
-  async mounted() {
+  mounted() {
     const id = Number(this.$route.params.id);
     if (!id) return;
-    const response = await this.getNews(id);
-    const { title, text, image_src } = response;
+    const news = this.getNewsById(id);
+    const { title, text, image_src } = news;
     this.id = id;
     this.title = title;
     this.text = text;
@@ -55,7 +60,7 @@ export default defineComponent({
     },
   },
   computed: {
-    ...mapGetters({ isAuth: 'getAuth' }),
+    ...mapGetters({ isAuth: 'getAuth', getNewsById: 'news/getNewsById' }),
     output(): string {
       return marked(this.text);
     },
@@ -65,12 +70,18 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .news-page {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  max-width: 750px;
-  width: 100%;
-  padding: 20px 0 20px 120px;
+  &__container {
+    margin: auto;
+    max-width: 1440px;
+    width: 100%;
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    max-width: 750px;
+    padding: 20px 0 20px 120px;
+    gap: 30px;
+  }
   &__text {
     font-family: 'Nunito', sans-serif;
   }

@@ -1,17 +1,40 @@
 <template>
   <div class="container">
     <Header />
-    <router-view :key="$route.fullPath"></router-view>
+    <MainLoader v-if="isLoaded" />
+    <router-view v-else :key="$route.fullPath"></router-view>
+    <Footer />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
+import Footer from './components/Footer.vue';
 import Header from './components/Header.vue';
 
 export default defineComponent({
-  components: { Header },
+  components: { Header, Footer },
   name: 'App',
+  mounted() {
+    this.setLoad(true);
+    this.fetchNews();
+    this.fetchBrands();
+    this.fetchCollections();
+  },
+  methods: {
+    ...mapMutations(['setLoad']),
+    ...mapActions({
+      fetchNews: 'news/read',
+      fetchBrands: 'brand/read',
+      fetchCollections: 'collection/read',
+    }),
+  },
+  computed: {
+    ...mapGetters({
+      isLoaded: 'getLoad',
+    }),
+  },
 });
 </script>
 

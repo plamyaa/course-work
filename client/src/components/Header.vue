@@ -1,50 +1,52 @@
 <template>
   <header class="header">
-    <TextWrapper
-      class="header__logo-wrapper"
-      :fontFamily="'tenorSans'"
-      :fontSize="24"
-    >
-      <router-link class="header__logo" to="/">SNEAKER FORCE</router-link>
-    </TextWrapper>
-    <nav class="header__nav">
+    <div class="header__container">
       <TextWrapper
-        class="header__text"
-        :fontFamily="'libreFranklin'"
-        :fontSize="14"
-        :fontWeight="700"
+        class="header__logo-wrapper"
+        :fontFamily="'tenorSans'"
+        :fontSize="24"
       >
-        <router-link class="header__link" to="/">Главная</router-link>
+        <router-link class="header__logo" to="/">SNEAKER FORCE</router-link>
       </TextWrapper>
-      <TextWrapper
-        class="header__text"
-        :fontFamily="'libreFranklin'"
-        :fontSize="14"
-        :fontWeight="700"
-      >
-        <a class="header__link" href="#">Новости</a>
-      </TextWrapper>
-      <TextWrapper
-        class="header__text"
-        :fontFamily="'libreFranklin'"
-        :fontSize="14"
-        :fontWeight="700"
-      >
-        <a class="header__link" href="#"> О Нас </a>
-      </TextWrapper>
-      <div v-if="isAuth">
+      <nav class="header__nav">
         <TextWrapper
           class="header__text"
           :fontFamily="'libreFranklin'"
           :fontSize="14"
           :fontWeight="700"
         >
-          <router-link class="header__link" to="/newsCreate">
-            Добавить статью
-          </router-link>
+          <router-link class="header__link" to="/">Главная</router-link>
         </TextWrapper>
-      </div>
-    </nav>
+        <TextWrapper
+          class="header__text"
+          :fontFamily="'libreFranklin'"
+          :fontSize="14"
+          :fontWeight="700"
+        >
+          <a class="header__link" href="#">Новости</a>
+        </TextWrapper>
+        <TextWrapper
+          class="header__text"
+          :fontFamily="'libreFranklin'"
+          :fontSize="14"
+          :fontWeight="700"
+        >
+          <a class="header__link" href="#"> О Нас </a>
+        </TextWrapper>
+        <div v-if="isAuth">
+          <TextWrapper
+            class="header__text"
+            :fontFamily="'libreFranklin'"
+            :fontSize="14"
+            :fontWeight="700"
+          >
+            <router-link class="header__link" to="/newsCreate">
+              Добавить статью
+            </router-link>
+          </TextWrapper>
+        </div>
+      </nav>
+    </div>
   </header>
 </template>
 
@@ -65,14 +67,17 @@ export default defineComponent({
 <style scoped lang="scss">
 .header {
   background: #fff5e5;
-  max-width: 1440px;
-  width: 100%;
-  height: 75px;
   border-bottom: 1px solid #e6e6e6;
-  padding: 0 120px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  &__container {
+    height: 75px;
+    margin: auto;
+    max-width: 1440px;
+    padding: 0 120px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   &__logo {
     text-decoration: none;
     color: #000000;

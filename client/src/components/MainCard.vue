@@ -1,21 +1,28 @@
 <template>
   <div class="card">
-    <img class="card__image" :src="image_src" @click="openNews" />
+    <img
+      class="card__image"
+      :src="image_src"
+      @click="openNews"
+      :style="{ height: style.height }"
+    />
     <TextWrapper
       :fontFamily="'libreFranklin'"
       :fontSize="10"
       :fontStyle="'italic'"
       :fontWeight="700"
+      :color="style.color"
     >
-      {{ brand }}
+      {{ getBrandById(id) }}
     </TextWrapper>
-    <TextWrapper>
+    <TextWrapper :fontFamily="'tenorSans'" :color="style.color">
       {{ title }}
     </TextWrapper>
     <TextWrapper
       :fontFamily="'libreFranklin'"
       :fontSize="10"
       :fontStyle="'italic'"
+      :color="style.color"
     >
       {{ author_id }}
     </TextWrapper>
@@ -24,7 +31,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'MainCard',
@@ -35,22 +42,26 @@ export default defineComponent({
     image_src: String,
     brand_id: Number,
     author_id: Number,
+    color: String,
+    imageHeight: String,
   },
   data() {
     return {
-      brand: '',
       author: '',
+      style: {
+        height: this.imageHeight ?? '255px',
+        color: this.color ?? null,
+      },
     };
   },
-  async mounted() {
-    const brandResponse = await this.getBrand(this.id);
-    this.brand = brandResponse.brand;
-  },
   methods: {
-    ...mapActions({ getBrand: 'brand/readById', deleteNews: 'news/delete' }),
+    ...mapActions({ deleteNews: 'news/delete' }),
     openNews() {
-      this.$router.push('newsPage/' + this.id);
+      this.$router.push('/newsPage/' + this.id);
     },
+  },
+  computed: {
+    ...mapGetters({ getBrandById: 'brand/getBrandById' }),
   },
 });
 </script>

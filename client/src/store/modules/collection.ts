@@ -22,6 +22,9 @@ const collection: Module<ICollectionState, IState> = {
     getCollection(state: ICollectionState) {
       return state.data;
     },
+    getCollectionByLength: (state: ICollectionState) => (len: number) => {
+      return state.data.slice(0, len);
+    },
   },
   mutations: {
     addCollection(state: ICollectionState, payload: ICollectionItem[]) {
@@ -32,7 +35,6 @@ const collection: Module<ICollectionState, IState> = {
     async read() {
       try {
         const response = await getAPI.get('/api/collection/');
-        console.log(response.data);
         this.commit('collection/addCollection', response.data);
       } catch (err) {
         console.log(err);

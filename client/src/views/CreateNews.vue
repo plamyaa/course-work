@@ -1,72 +1,74 @@
 <template>
   <div class="create-news">
-    <form class="create-news__form form">
-      <TextWrapper
-        :fontFamily="'libreFranklin'"
-        :fontStyle="'italic'"
-        :fontSize="10"
-      >
-        Заполните поля для создания новости:
-      </TextWrapper>
-      <label class="form__label" for="title">
-        <input
-          class="form__input"
-          type="text"
-          id="title"
-          placeholder="Заголовок..."
-          maxlength="100"
-          v-model="title"
-        />
+    <div class="create-news__container">
+      <form class="create-news__form form">
         <TextWrapper
           :fontFamily="'libreFranklin'"
-          :color="'#1111117a'"
+          :fontStyle="'italic'"
           :fontSize="10"
-          >{{ titleLen }}/100</TextWrapper
         >
-      </label>
-      <label class="form__label" for="title">
-        <input
-          class="form__input"
-          type="text"
-          id="title"
-          placeholder="Ссылка на главное изображение..."
-          v-model="image_src"
-        />
-      </label>
-      <div class="form__selectors">
-        <select class="form__input">
-          <option>1</option>
-          <option>2</option>
-        </select>
-        <select class="form__input">
-          <option>1</option>
-          <option>2</option>
-        </select>
-      </div>
-      <label class="form__label" for="title">
-        <textarea
-          class="form__input"
-          id="title"
-          placeholder="Текст новости..."
-          rows="20"
-          v-model="text"
-        />
-      </label>
-      <MainButton v-if="id === 0" class="form__submit" @click="createNews">
-        Создать новость
-      </MainButton>
-      <MainButton v-else class="form__submit" @click="editNews">
-        Редактивароать новость
-      </MainButton>
-    </form>
-    <div v-html="output" class="create-news__output"></div>
+          Заполните поля для создания новости:
+        </TextWrapper>
+        <label class="form__label" for="title">
+          <input
+            class="form__input"
+            type="text"
+            id="title"
+            placeholder="Заголовок..."
+            maxlength="100"
+            v-model="title"
+          />
+          <TextWrapper
+            :fontFamily="'libreFranklin'"
+            :color="'#1111117a'"
+            :fontSize="10"
+            >{{ titleLen }}/100</TextWrapper
+          >
+        </label>
+        <label class="form__label" for="title">
+          <input
+            class="form__input"
+            type="text"
+            id="title"
+            placeholder="Ссылка на главное изображение..."
+            v-model="image_src"
+          />
+        </label>
+        <div class="form__selectors">
+          <select class="form__input">
+            <option>1</option>
+            <option>2</option>
+          </select>
+          <select class="form__input">
+            <option>1</option>
+            <option>2</option>
+          </select>
+        </div>
+        <label class="form__label" for="title">
+          <textarea
+            class="form__input"
+            id="title"
+            placeholder="Текст новости..."
+            rows="20"
+            v-model="text"
+          />
+        </label>
+        <MainButton v-if="id === 0" class="form__submit" @click="createNews">
+          Создать новость
+        </MainButton>
+        <MainButton v-else class="form__submit" @click="editNews">
+          Редактивароать новость
+        </MainButton>
+      </form>
+      <div v-html="output" class="create-news__output"></div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { marked } from 'marked';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'CreateNews',
@@ -83,8 +85,8 @@ export default defineComponent({
   async mounted() {
     const id = Number(this.$route.params.id);
     if (!id) return;
-    const response = await this.getNews(id);
-    const { title, text, image_src, collection, brand } = response;
+    const news = this.getNewsById(id);
+    const { title, text, image_src, collection, brand } = news;
     this.id = id;
     this.title = title;
     this.text = text;
@@ -93,6 +95,9 @@ export default defineComponent({
     this.brand = brand;
   },
   computed: {
+    ...mapGetters({
+      getNewsById: 'news/getNewsById',
+    }),
     titleLen(): number {
       return this.title.length;
     },
@@ -144,12 +149,16 @@ export default defineComponent({
 <style scoped lang="scss">
 .create-news {
   background: #fffefc;
-  max-width: 1440px;
-  width: 100%;
-  padding: 20px 120px;
-  display: grid;
-  grid-template-columns: 35% 65%;
-  column-gap: 55px;
+
+  &__container {
+    margin: auto;
+    max-width: 1440px;
+    width: 100%;
+    padding: 20px 120px;
+    display: grid;
+    grid-template-columns: 35% 65%;
+    column-gap: 55px;
+  }
   &__output {
     width: calc(100% - 55px);
     overflow-wrap: break-word;
