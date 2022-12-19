@@ -8,7 +8,10 @@ export interface INewsItem {
   text: string;
   image_src: string;
   publish_date: Date;
-  update_date?: Date;
+  update_date: Date;
+  collection_id: string;
+  brand_id: string;
+  author_id: string;
 }
 
 export interface INewsState {
@@ -16,6 +19,7 @@ export interface INewsState {
 }
 
 const news: Module<INewsState, IState> = {
+  namespaced: true,
   state() {
     return {
       data: [] as INewsItem[],
@@ -32,15 +36,16 @@ const news: Module<INewsState, IState> = {
     },
   },
   actions: {
-    async getAllNews() {
+    async read() {
       try {
         const response = await getAPI.get('/api/news/');
-        this.commit('addNews', response.data);
+        console.log(response.data);
+        this.commit('news/addNews', response.data);
       } catch (err) {
         console.log(err);
       }
     },
-    async getNews(context, id: number) {
+    async readById(context, id: number) {
       try {
         const respnose = await getAPI.get(`/api/news/${id}/`);
         return respnose.data;
@@ -48,7 +53,7 @@ const news: Module<INewsState, IState> = {
         console.log(err);
       }
     },
-    async addNews(
+    async create(
       context,
       {
         title,
@@ -62,12 +67,12 @@ const news: Module<INewsState, IState> = {
           text: text,
           image_src: image_src,
         });
-        this.dispatch('getAllNews');
+        this.dispatch('read');
       } catch (err) {
         console.log(err);
       }
     },
-    async updateNews(
+    async update(
       context,
       {
         id,
@@ -81,17 +86,16 @@ const news: Module<INewsState, IState> = {
           title: title,
           text: text,
           image_src: image_src,
-          update_date: new Date(),
         });
-        this.dispatch('getAllNews');
+        this.dispatch('read');
       } catch (err) {
         console.log(err);
       }
     },
-    async deleteNews(context, id: number) {
+    async delete(context, id: number) {
       try {
         getAPI.delete(`/api/news/${id}/`);
-        this.dispatch('getAllNews');
+        this.dispatch('read');
       } catch (err) {
         console.log(err);
       }
