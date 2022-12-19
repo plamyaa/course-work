@@ -10,7 +10,9 @@ class News(models.Model):
   image_src = models.CharField(max_length=255)
   publish_date = models.DateTimeField(auto_now_add=True)
   update_date = models.DateTimeField(auto_now=True, null=True)
-  brand_id = models.ForeignKey(Brand, on_delete=models.SET_NULL, blank=True, null=True)
-  collection_id = models.ForeignKey(Collection, on_delete=models.SET_NULL, blank=True, null=True)
+  brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, blank=True, null=True)
+  collection = models.ForeignKey(Collection, on_delete=models.SET_NULL, blank=True, null=True)
   author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True) 
 
+  def __str__(self):
+    return self.title
