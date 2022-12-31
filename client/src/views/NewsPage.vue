@@ -2,9 +2,13 @@
   <div class="news-page">
     <div class="news-page__container">
       <div class="news-page__content">
-        <div class="news-page__buttons" v-if="isAuth">
-          <MainButton @click="editNews">Редактировать новость</MainButton>
-          <MainButton @click="deleteConfirm"> Удалить новость </MainButton>
+        <div class="news-page__buttons">
+          <MainButton v-if="role < 3" @click="editNews"
+            >Редактировать новость</MainButton
+          >
+          <MainButton v-if="role < 2" @click="deleteSubmit">
+            Удалить новость
+          </MainButton>
         </div>
         <TextWrapper
           class="news-page__title"
@@ -48,11 +52,11 @@ export default defineComponent({
     this.image_src = image_src;
   },
   methods: {
-    ...mapActions({ getNews: 'news/readById', deleteNews: 'news/delete' }),
+    ...mapActions({ deleteNews: 'news/delete' }),
     editNews() {
       this.$router.push('/newsEdit/' + this.id);
     },
-    deleteConfirm() {
+    deleteSubmit() {
       const answer = confirm('Вы уверены, что хотите удалить новость?');
       if (answer) {
         this.deleteNews(this.id);
@@ -60,7 +64,10 @@ export default defineComponent({
     },
   },
   computed: {
-    ...mapGetters({ isAuth: 'getAuth', getNewsById: 'news/getNewsById' }),
+    ...mapGetters({
+      role: 'user/getRole',
+      getNewsById: 'news/getNewsById',
+    }),
     output(): string {
       return marked(this.text);
     },

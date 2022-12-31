@@ -23,6 +23,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/NewsPage.vue'),
     props: true,
   },
+  {
+    path: '/auth',
+    name: 'auth',
+    component: () => import('@/views/Auth.vue'),
+  },
 ];
 
 const router = createRouter({

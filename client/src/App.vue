@@ -16,15 +16,17 @@ import Header from './components/Header.vue';
 export default defineComponent({
   components: { Header, Footer },
   name: 'App',
-  mounted() {
+  async mounted() {
     this.setLoad(true);
     this.fetchNews();
     this.fetchBrands();
     this.fetchCollections();
+    this.refreshToken();
   },
   methods: {
-    ...mapMutations(['setLoad']),
+    ...mapMutations({ setLoad: 'setLoad' }),
     ...mapActions({
+      refreshToken: 'user/refreshToken',
       fetchNews: 'news/read',
       fetchBrands: 'brand/read',
       fetchCollections: 'collection/read',

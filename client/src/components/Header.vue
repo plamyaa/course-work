@@ -33,7 +33,7 @@
         >
           <a class="header__link" href="#"> О Нас </a>
         </TextWrapper>
-        <div v-if="isAuth">
+        <div v-if="role < 3">
           <TextWrapper
             class="header__text"
             :fontFamily="'libreFranklin'"
@@ -58,7 +58,7 @@ export default defineComponent({
   name: 'MainHeader',
   computed: {
     ...mapGetters({
-      isAuth: 'getAuth',
+      role: 'user/getRole',
     }),
   },
 });

@@ -1,7 +1,7 @@
 <template>
   <div class="create-news">
     <div class="create-news__container">
-      <form class="create-news__form form">
+      <form class="create-news__form form" @submit.prevent="createNews">
         <TextWrapper
           :fontFamily="'libreFranklin'"
           :fontStyle="'italic'"
@@ -16,14 +16,16 @@
             id="title"
             placeholder="Заголовок..."
             maxlength="100"
+            required="true"
             v-model="title"
           />
           <TextWrapper
             :fontFamily="'libreFranklin'"
             :color="'#1111117a'"
             :fontSize="10"
-            >{{ titleLen }}/100</TextWrapper
           >
+            {{ titleLen }}/100
+          </TextWrapper>
         </label>
         <label class="form__label" for="title">
           <input
@@ -31,6 +33,7 @@
             type="text"
             id="title"
             placeholder="Ссылка на главное изображение..."
+            required="true"
             v-model="image_src"
           />
         </label>
@@ -50,13 +53,14 @@
             id="title"
             placeholder="Текст новости..."
             rows="20"
+            required="true"
             v-model="text"
           />
         </label>
-        <MainButton v-if="id === 0" class="form__submit" @click="createNews">
+        <MainButton v-if="id === 0" class="form__submit">
           Создать новость
         </MainButton>
-        <MainButton v-else class="form__submit" @click="editNews">
+        <MainButton v-else class="form__submit">
           Редактивароать новость
         </MainButton>
       </form>
