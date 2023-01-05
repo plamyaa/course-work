@@ -3,9 +3,9 @@
     <div class="news-page__container">
       <div class="news-page__content">
         <div class="news-page__buttons">
-          <MainButton v-if="role < 3" @click="editNews"
-            >Редактировать новость</MainButton
-          >
+          <MainButton v-if="role < 3" @click="editNews">
+            Редактировать новость
+          </MainButton>
           <MainButton v-if="role < 2" @click="deleteSubmit">
             Удалить новость
           </MainButton>
@@ -95,6 +95,21 @@ export default defineComponent({
   &__buttons {
     display: flex;
     gap: 20px;
+  }
+}
+@media (max-width: 1024px) {
+  .news-page__content {
+    padding: 20px 80px;
+  }
+}
+@media (max-width: 768px) {
+  .news-page__content {
+    padding: 20px 50px;
+  }
+}
+@media (max-width: 475px) {
+  .news-page__content {
+    padding: 20px;
   }
 }
 </style>

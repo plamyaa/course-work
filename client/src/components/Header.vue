@@ -100,4 +100,19 @@ export default defineComponent({
     }
   }
 }
+@media (max-width: 1024px) {
+  .header__container {
+    padding: 0 80px;
+  }
+}
+@media (max-width: 768px) {
+  .header__container {
+    padding: 0 50px;
+  }
+}
+@media (max-width: 475px) {
+  .header__container {
+    padding: 20px;
+  }
+}
 </style>

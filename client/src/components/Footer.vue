@@ -40,7 +40,9 @@
           <ul class="footer__brands-list">
             <li v-for="brand in brandsLen(8)" :key="brand.id">
               <TextWrapper :fontFamily="'tenorSans'" :color="'#fff'">
-                {{ brand.brand }}
+                <router-link class="footer__link" to="/">
+                  {{ brand.brand }}
+                </router-link>
               </TextWrapper>
             </li>
           </ul>
@@ -61,7 +63,9 @@
           <ul class="footer__brands-list">
             <li v-for="collection in collectionsLen(8)" :key="collection.id">
               <TextWrapper :fontFamily="'tenorSans'" :color="'#fff'">
-                {{ collection.collection }}
+                <router-link class="footer__link" to="/">
+                  {{ collection.collection }}
+                </router-link>
               </TextWrapper>
             </li>
           </ul>
@@ -137,11 +141,48 @@ export default defineComponent({
     text-transform: uppercase;
     margin-bottom: 15px;
   }
+  &__link {
+    text-decoration: none;
+    transition: 0.3s;
+    text-decoration: none;
+    color: #ffffff;
+    &:visited {
+      color: #c4c4c4;
+    }
+    &:hover {
+      color: #f1f1f1;
+    }
+    &:active {
+      color: #aeaeae;
+    }
+  }
   &__rights {
     height: 70px;
     display: flex;
     align-items: flex-end;
     gap: 15px;
+  }
+}
+@media (max-width: 1024px) {
+  .footer__container {
+    padding: 35px 80px 15px;
+  }
+}
+@media (max-width: 768px) {
+  .footer__container {
+    padding: 30px 50px 15px;
+  }
+  .footer__content {
+    row-gap: 20px;
+    grid-template-columns: repeat(2, calc((100% - 30px) / 2));
+  }
+}
+@media (max-width: 475px) {
+  .footer__container {
+    padding: 20px;
+  }
+  .footer__content {
+    grid-template-columns: 100%;
   }
 }
 </style>

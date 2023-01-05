@@ -16,7 +16,9 @@
       {{ getBrandById(id) }}
     </TextWrapper>
     <TextWrapper :fontFamily="'tenorSans'" :color="style.color">
-      {{ title }}
+      <router-link class="card__link" :to="`newsPage/${id}`">
+        {{ title }}
+      </router-link>
     </TextWrapper>
     <TextWrapper
       :fontFamily="'libreFranklin'"
@@ -76,6 +78,17 @@ export default defineComponent({
     cursor: pointer;
     height: 255px;
     object-fit: cover;
+  }
+  &__link {
+    text-decoration: none;
+    color: v-bind(color);
+    transition: 0.3s;
+    &:visited {
+      opacity: 0.9;
+    }
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 

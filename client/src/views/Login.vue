@@ -1,32 +1,24 @@
 <template>
-  <div class="auth">
-    <div class="auth__container">
-      <form class="auth__form" @submit.prevent="handleLogin">
-        <label class="auth__label" for="login">Введите логин:</label>
+  <div class="login">
+    <div class="login__container">
+      <form class="login__form" @submit.prevent="handleLogin">
+        <label class="login__label" for="login">Введите логин:</label>
         <input
-          class="auth__input"
+          class="login__input"
           type="text"
           id="login"
           required="true"
           v-model.trim="username"
         />
-        <label class="auth__label" for="login">Введите почту:</label>
+        <label class="login__label" for="password">Введите пароль:</label>
         <input
-          class="auth__input"
-          type="email"
-          id="login"
-          required="true"
-          v-model.trim="email"
-        />
-        <label class="auth__label" for="password">Введите пароль:</label>
-        <input
-          class="auth__input"
+          class="login__input"
           type="password"
           id="password"
           required="true"
           v-model.trim="password"
         />
-        <button class="auth__submit-btn">Зарегистрироваться</button>
+        <button class="login__submit-btn">Войти</button>
       </form>
     </div>
   </div>
@@ -37,26 +29,21 @@ import { defineComponent } from 'vue';
 import { mapActions, mapMutations } from 'vuex';
 
 export default defineComponent({
-  name: 'MainAuth',
+  name: 'MainLogin',
   data() {
     return {
       username: '',
-      email: '',
       password: '',
     };
   },
   methods: {
     ...mapMutations({ setAuth: 'user/setAuth' }),
     ...mapActions({
-      registerUser: 'user/registerUser',
+      loginUser: 'user/loginUser',
       readRole: 'user/readRoleByUsername',
     }),
     handleLogin() {
-      this.registerUser({
-        username: this.username,
-        email: this.email,
-        password: this.password,
-      });
+      this.loginUser({ username: this.username, password: this.password });
       this.readRole({ username: this.username });
       this.$router.push('/');
     },
@@ -65,7 +52,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.auth {
+.login {
   width: 100vw;
   height: calc(100vh - 75px);
   &__container {
