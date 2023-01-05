@@ -1,5 +1,10 @@
 import { IState } from './../index';
-import getAPI from '@/api/axios-api';
+import {
+  POST_WITH_TOKEN,
+  GET,
+  PUT_WITH_TOKEN,
+  DELETE_WITH_TOKEN,
+} from '@/api/axios-api';
 import { Module } from 'vuex';
 
 export interface INewsItem {
@@ -43,21 +48,13 @@ const news: Module<INewsState, IState> = {
   },
   actions: {
     async read() {
-      try {
-        const response = await getAPI.get('/api/news/');
-        this.commit('news/addNews', response.data);
-        this.commit('setLoad', false);
-      } catch (err) {
-        console.log(err);
-      }
+      const response = await GET('/api/news/');
+      this.commit('news/addNews', response.data);
+      this.commit('setLoad', false);
     },
     async readById(context, id: number) {
-      try {
-        const respnose = await getAPI.get(`/api/news/${id}/`);
-        return respnose.data;
-      } catch (err) {
-        console.log(err);
-      }
+      const respnose = await GET(`/api/news/${id}/`);
+      return respnose.data;
     },
     async create(
       context,
@@ -67,16 +64,12 @@ const news: Module<INewsState, IState> = {
         image_src,
       }: { title: string; text: string; image_src: string }
     ) {
-      try {
-        getAPI.post(`/api/news/`, {
-          title: title,
-          text: text,
-          image_src: image_src,
-        });
-        this.dispatch('read');
-      } catch (err) {
-        console.log(err);
-      }
+      POST_WITH_TOKEN(`/api/news/`, {
+        title: title,
+        text: text,
+        image_src: image_src,
+      });
+      this.dispatch('read');
     },
     async update(
       context,
@@ -87,24 +80,16 @@ const news: Module<INewsState, IState> = {
         image_src,
       }: { id: number; title: string; text: string; image_src: string }
     ) {
-      try {
-        getAPI.put(`/api/news/${id}/`, {
-          title: title,
-          text: text,
-          image_src: image_src,
-        });
-        this.dispatch('read');
-      } catch (err) {
-        console.log(err);
-      }
+      PUT_WITH_TOKEN(`/api/news/${id}/`, {
+        title: title,
+        text: text,
+        image_src: image_src,
+      });
+      this.dispatch('read');
     },
     async delete(context, id: number) {
-      try {
-        getAPI.delete(`/api/news/${id}/`);
-        this.dispatch('read');
-      } catch (err) {
-        console.log(err);
-      }
+      DELETE_WITH_TOKEN(`/api/news/${id}/`);
+      this.dispatch('read');
     },
   },
 };

@@ -1,5 +1,10 @@
 import { IState } from './../index';
-import getAPI from '@/api/axios-api';
+import {
+  POST_WITH_TOKEN,
+  GET,
+  PUT_WITH_TOKEN,
+  DELETE_WITH_TOKEN,
+} from '@/api/axios-api';
 import { Module } from 'vuex';
 
 export interface ICategoryItem {
@@ -33,46 +38,26 @@ const category: Module<ICategoryState, IState> = {
   },
   actions: {
     async read() {
-      try {
-        const response = await getAPI.get('/api/category/');
-        this.commit('category/addCategory', response.data);
-      } catch (err) {
-        console.log(err);
-      }
+      const response = await GET('/api/category/');
+      this.commit('category/addCategory', response.data);
     },
     async readById(context, id: number) {
-      try {
-        const respnose = await getAPI.get(`/api/category/${id}/`);
-        return respnose.data;
-      } catch (err) {
-        console.log(err);
-      }
+      const respnose = await GET(`/api/category/${id}/`);
+      return respnose.data;
     },
     async create(context, { category }: { category: string }) {
-      try {
-        getAPI.post(`/api/category/`, { category: category });
-        this.dispatch('read');
-      } catch (err) {
-        console.log(err);
-      }
+      POST_WITH_TOKEN(`/api/category/`, { category: category });
+      this.dispatch('read');
     },
     async update(context, { id, category }: { id: number; category: string }) {
-      try {
-        getAPI.put(`/api/category/${id}/`, {
-          category: category,
-        });
-        this.dispatch('read');
-      } catch (err) {
-        console.log(err);
-      }
+      PUT_WITH_TOKEN(`/api/category/${id}/`, {
+        category: category,
+      });
+      this.dispatch('read');
     },
     async delete(context, id: number) {
-      try {
-        getAPI.delete(`/api/category/${id}/`);
-        this.dispatch('read');
-      } catch (err) {
-        console.log(err);
-      }
+      DELETE_WITH_TOKEN(`/api/category/${id}/`);
+      this.dispatch('read');
     },
   },
 };

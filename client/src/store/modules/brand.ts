@@ -1,5 +1,10 @@
 import { IState } from './../index';
-import getAPI from '@/api/axios-api';
+import {
+  POST_WITH_TOKEN,
+  GET,
+  PUT_WITH_TOKEN,
+  DELETE_WITH_TOKEN,
+} from '@/api/axios-api';
 import { Module } from 'vuex';
 
 export interface IBrandItem {
@@ -37,46 +42,26 @@ const brand: Module<IBrandState, IState> = {
   },
   actions: {
     async read() {
-      try {
-        const response = await getAPI.get('/api/brand/');
-        this.commit('brand/addBrand', response.data);
-      } catch (err) {
-        console.log(err);
-      }
+      const response = await GET('/api/brand/');
+      this.commit('brand/addBrand', response.data);
     },
     async readById(context, id: number) {
-      try {
-        const respnose = await getAPI.get(`/api/brand/${id}/`);
-        return respnose.data;
-      } catch (err) {
-        console.log(err);
-      }
+      const respnose = await GET(`/api/brand/${id}/`);
+      return respnose.data;
     },
     async create(context, { brand }: { brand: string }) {
-      try {
-        getAPI.post(`/api/brand/`, { brand: brand });
-        this.dispatch('read');
-      } catch (err) {
-        console.log(err);
-      }
+      POST_WITH_TOKEN(`/api/brand/`, { brand: brand });
+      this.dispatch('read');
     },
     async update(context, { id, brand }: { id: number; brand: string }) {
-      try {
-        getAPI.put(`/api/brand/${id}/`, {
-          brand: brand,
-        });
-        this.dispatch('read');
-      } catch (err) {
-        console.log(err);
-      }
+      PUT_WITH_TOKEN(`/api/brand/${id}/`, {
+        brand: brand,
+      });
+      this.dispatch('read');
     },
     async delete(context, id: number) {
-      try {
-        getAPI.delete(`/api/brand/${id}/`);
-        this.dispatch('read');
-      } catch (err) {
-        console.log(err);
-      }
+      DELETE_WITH_TOKEN(`/api/brand/${id}/`);
+      this.dispatch('read');
     },
   },
 };
