@@ -1,8 +1,10 @@
 <template>
   <div class="container">
     <Header />
-    <MainLoader v-if="isLoaded" />
-    <router-view v-else :key="$route.fullPath"></router-view>
+    <div class="content">
+      <MainLoader v-if="isLoaded" />
+      <router-view v-else :key="$route.fullPath"></router-view>
+    </div>
     <Footer />
   </div>
 </template>
@@ -46,5 +48,36 @@ export default defineComponent({
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  max-width: 1440px;
+  box-sizing: border-box;
+  padding: 20px 120px;
+  width: 100%;
+  flex: 1;
+  margin: auto;
+}
+
+@media (max-width: 1024px) {
+  .content {
+    padding: 20px 80px;
+  }
+}
+@media (max-width: 768px) {
+  .content {
+    padding: 20px 50px;
+  }
+}
+@media (max-width: 475px) {
+  .content {
+    padding: 20px;
+  }
 }
 </style>

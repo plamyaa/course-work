@@ -40,6 +40,9 @@ const user: Module<IUserState, IState> = {
       state.role = role;
     },
     logoutUser(state: IUserState) {
+      Object.keys(Cookies.get()).forEach((cookieName) => {
+        Cookies.remove(cookieName);
+      });
       (state.role = 100), (state.isAuth = false), (state.username = '');
     },
   },
@@ -52,8 +55,10 @@ const user: Module<IUserState, IState> = {
         username: username,
         password: password,
       });
+      Cookies.set('username', username);
       Cookies.set('refreshToken', response.data.refresh);
       Cookies.set('accessToken', response.data.access);
+      this.dispatch('user/readRoleByUsername', { username: username });
       this.commit('user/setAuth', true);
     },
     async registerUser(
@@ -64,26 +69,30 @@ const user: Module<IUserState, IState> = {
         password,
       }: { username: string; email: string; password: string }
     ) {
-      const response = await POST('/api/user/', {
+      const { data } = await POST('/api/user/', {
         username: username,
         email: email,
         password: password,
       });
-      console.log()
+      console.log(data.results);
     },
     async refreshToken() {
       const refreshToken = Cookies.get('refreshToken');
+      if (!refreshToken) return;
       const response = await POST_WITH_TOKEN('/api/token/refresh/', {
         refresh: refreshToken,
       });
-      Cookies.set('accessToken', response.access);
-      this.commit('user/setAuth', true);
+      Cookies.set('accessToken', response.data.access);
+      const username = Cookies.get('username');
+      if (username) {
+        this.commit('user/setUsername', username);
+        this.dispatch('user/readRoleByUsername', { username: username });
+        this.commit('user/setAuth', true);
+      }
     },
     async readRoleByUsername(context, { username }: { username: string }) {
-      const userRoleId = await GET_WITH_TOKEN(
-        `/api/user/?username=${username}`
-      );
-      this.commit('user/setRole', userRoleId[0].groups[0] ?? 0);
+      const { data } = await GET_WITH_TOKEN(`/api/user/?username=${username}`);
+      this.commit('user/setRole', data.results[0].groups[0] ?? 0);
     },
   },
 };

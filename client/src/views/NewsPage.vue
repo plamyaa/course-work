@@ -2,7 +2,7 @@
   <div class="news-page">
     <div class="news-page__container">
       <div class="news-page__content">
-        <div class="news-page__buttons">
+        <div class="news-page__buttons" v-if="role < 3">
           <MainButton v-if="role < 3" @click="editNews">
             Редактировать новость
           </MainButton>
@@ -78,7 +78,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .news-page {
   &__container {
-    margin: auto;
+    margin: 0 auto;
     max-width: 1440px;
     width: 100%;
   }
@@ -86,7 +86,6 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     max-width: 750px;
-    padding: 20px 0 20px 120px;
     gap: 30px;
   }
   &__text {
@@ -95,21 +94,6 @@ export default defineComponent({
   &__buttons {
     display: flex;
     gap: 20px;
-  }
-}
-@media (max-width: 1024px) {
-  .news-page__content {
-    padding: 20px 80px;
-  }
-}
-@media (max-width: 768px) {
-  .news-page__content {
-    padding: 20px 50px;
-  }
-}
-@media (max-width: 475px) {
-  .news-page__content {
-    padding: 20px;
   }
 }
 </style>

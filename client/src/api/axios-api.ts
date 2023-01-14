@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import store from '@/store';
 
 const axiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8000',
@@ -9,7 +10,11 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     // Обработка ошибки
-    throw error;
+    if (error.response.status === 401) {
+      console.log(error);
+    } else {
+      throw error;
+    }
   }
 );
 
@@ -29,66 +34,59 @@ async function GET(url: string) {
 async function POST_WITH_TOKEN(url: string, payload: object = {}) {
   const token = `Bearer ${Cookies.get('accessToken')}`;
 
-  const { data } = await axiosInstance.post(url, payload, {
+  return await axiosInstance.post(url, payload, {
     headers: {
       Authorization: token,
       Accept: 'application/json',
     },
   });
-  return data;
 }
 
 async function GET_WITH_TOKEN(url: string, params: any = {}) {
   const token = `Bearer ${Cookies.get('accessToken')}`;
 
-  const { data } = await axiosInstance.get(url, {
+  return await axiosInstance.get(url, {
     headers: {
       Authorization: token,
       'Content-Type': 'application/json',
       Accept: 'application/json',
     },
   });
-
-  return data;
 }
 
 async function PATCH_WITH_TOKEN(url: string, payload: object = {}) {
   const token = `Bearer ${Cookies.get('accessToken')}`;
 
-  const { data } = await axiosInstance.patch(url, payload, {
+  return await axiosInstance.patch(url, payload, {
     headers: {
       Authorization: token,
       'Content-Type': 'application/json',
       Accept: 'application/json',
     },
   });
-  return data;
 }
 
 async function PUT_WITH_TOKEN(url: string, payload: object) {
   const token = `Bearer ${Cookies.get('accessToken')}`;
 
-  const { data } = await axiosInstance.put(url, payload, {
+  return await axiosInstance.put(url, payload, {
     headers: {
       Authorization: token,
       'Content-Type': 'application/json',
       Accept: 'application/json',
     },
   });
-
-  return data;
 }
 
 async function DELETE_WITH_TOKEN(url: string, payload?: Array<any>) {
   const token = `Bearer ${Cookies.get('accessToken')}`;
 
-  const { data } = await axiosInstance.delete(url, {
+  return await axiosInstance.delete(url, {
     headers: {
       Authorization: token,
     },
     data: payload,
   });
-  return data;
 }
 
 export {

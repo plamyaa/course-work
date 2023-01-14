@@ -42,8 +42,8 @@ const brand: Module<IBrandState, IState> = {
   },
   actions: {
     async read() {
-      const response = await GET('/api/brand/');
-      this.commit('brand/addBrand', response.data);
+      const { data } = await GET('/api/brand/');
+      this.commit('brand/addBrand', data.results);
     },
     async readById(context, id: number) {
       const respnose = await GET(`/api/brand/${id}/`);

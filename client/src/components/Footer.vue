@@ -38,10 +38,10 @@
           </TextWrapper>
           <hr class="footer__line" />
           <ul class="footer__brands-list">
-            <li v-for="brand in brandsLen(8)" :key="brand.id">
+            <li v-for="{ brand, id } in brandsLen(8)" :key="id">
               <TextWrapper :fontFamily="'tenorSans'" :color="'#fff'">
-                <router-link class="footer__link" to="/">
-                  {{ brand.brand }}
+                <router-link class="footer__link" :to="`/brand/${id}`">
+                  {{ brand }}
                 </router-link>
               </TextWrapper>
             </li>
@@ -61,10 +61,10 @@
           </TextWrapper>
           <hr class="footer__line" />
           <ul class="footer__brands-list">
-            <li v-for="collection in collectionsLen(8)" :key="collection.id">
+            <li v-for="{ collection, id } in collectionsLen(8)" :key="id">
               <TextWrapper :fontFamily="'tenorSans'" :color="'#fff'">
-                <router-link class="footer__link" to="/">
-                  {{ collection.collection }}
+                <router-link class="footer__link" :to="`/collection/${id}`">
+                  {{ collection }}
                 </router-link>
               </TextWrapper>
             </li>

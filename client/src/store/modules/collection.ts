@@ -38,8 +38,8 @@ const collection: Module<ICollectionState, IState> = {
   },
   actions: {
     async read() {
-      const response = await GET('/api/collection/');
-      this.commit('collection/addCollection', response.data);
+      const { data } = await GET('/api/collection/');
+      this.commit('collection/addCollection', data.results);
     },
     async readById(context, id: number) {
       const respnose = await GET(`/api/collection/${id}/`);

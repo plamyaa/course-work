@@ -13,7 +13,9 @@
       :fontWeight="700"
       :color="style.color"
     >
-      {{ getBrandById(id) }}
+      <router-link :to="`/brand/${id}`" class="card__link">
+        {{ getBrandById(brand_id) }}
+      </router-link>
     </TextWrapper>
     <TextWrapper :fontFamily="'tenorSans'" :color="style.color">
       <router-link class="card__link" :to="`newsPage/${id}`">
@@ -26,7 +28,7 @@
       :fontStyle="'italic'"
       :color="style.color"
     >
-      {{ author_id }}
+      <router-link :to="`/author/${id}`">{{ author_id }}</router-link>
     </TextWrapper>
   </div>
 </template>
