@@ -1,5 +1,5 @@
 <template>
-  <div class="text-wrapper" :class="fontFamily" :style="styleObject">
+  <div class="text-wrapper" :class="fontFamily">
     <slot />
   </div>
 </template>
@@ -10,20 +10,30 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'TextWrapper',
   props: {
-    fontFamily: String,
-    fontSize: Number,
-    fontStyle: String,
-    fontWeight: Number,
-    color: String,
+    fontFamily: {
+      type: String,
+      default: 'tenorSans',
+    },
+    fontSize: {
+      type: Number,
+      default: 20,
+    },
+    fontStyle: {
+      type: String,
+      default: 'normal',
+    },
+    fontWeight: {
+      type: Number,
+      default: 400,
+    },
+    color: {
+      type: String,
+      default: '#000',
+    },
   },
   data() {
     return {
-      styleObject: {
-        fontSize: (this.fontSize ?? 20) + 'px',
-        fontStyle: this.fontStyle ?? 'normal',
-        fontWeight: this.fontWeight ?? 400,
-        color: this.color ?? '#000000',
-      },
+      size: this.fontSize + 'px',
     };
   },
 });
@@ -35,5 +45,11 @@ export default defineComponent({
 }
 .libreFranklin {
   font-family: 'Libre Franklin', sans-serif;
+}
+.text-wrapper {
+  font-size: v-bind(size);
+  font-style: v-bind(fontStyle);
+  font-weight: v-bind(fontWeight);
+  color: v-bind(color);
 }
 </style>

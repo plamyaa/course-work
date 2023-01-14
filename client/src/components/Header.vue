@@ -25,26 +25,29 @@
         >
           <a class="header__link" href="#">Новости</a>
         </TextWrapper>
+
         <TextWrapper
           class="header__text"
           :fontFamily="'libreFranklin'"
           :fontSize="14"
           :fontWeight="700"
+          v-if="role < 3"
         >
-          <a class="header__link" href="#"> О Нас </a>
+          <router-link class="header__link" to="/newsCreate">
+            Добавить статью
+          </router-link>
         </TextWrapper>
-        <div v-if="role < 3">
-          <TextWrapper
-            class="header__text"
-            :fontFamily="'libreFranklin'"
-            :fontSize="14"
-            :fontWeight="700"
-          >
-            <router-link class="header__link" to="/newsCreate">
-              Добавить статью
-            </router-link>
-          </TextWrapper>
-        </div>
+        <TextWrapper
+          class="header__text"
+          :fontFamily="'libreFranklin'"
+          :fontSize="14"
+          :fontWeight="700"
+          @click="handleAuth"
+        >
+          <router-link class="header__link" :to="authButton.route">
+            {{ authButton.text }}
+          </router-link>
+        </TextWrapper>
       </nav>
     </div>
   </header>
@@ -52,14 +55,39 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default defineComponent({
   name: 'MainHeader',
+  methods: {
+    ...mapMutations({
+      logout: 'user/logoutUser',
+    }),
+    handleAuth() {
+      if (this.isAuth === true) {
+        this.logout();
+      }
+    },
+  },
   computed: {
     ...mapGetters({
       role: 'user/getRole',
+      isAuth: 'user/getAuth',
     }),
+    authButton() {
+      switch (this.isAuth) {
+        case false:
+          return {
+            route: '/login',
+            text: 'Войти',
+          };
+        default:
+          return {
+            route: '/',
+            text: 'Выйти',
+          };
+      }
+    },
   },
 });
 </script>

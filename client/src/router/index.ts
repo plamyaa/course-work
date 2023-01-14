@@ -33,6 +33,33 @@ const routes: Array<RouteRecordRaw> = [
     name: 'register',
     component: () => import('@/views/Auth.vue'),
   },
+  {
+    path: '/brand/:id',
+    name: 'brand',
+    component: () => import('@/views/SortPage.vue'),
+    props: (route) => ({ query: route.query.q }),
+  },
+  {
+    path: '/collection/:id',
+    name: 'collection',
+    component: () => import('@/views/SortPage.vue'),
+    props: true,
+  },
+  {
+    path: '/category/:id',
+    name: 'category',
+    component: () => import('@/views/SortPage.vue'),
+    props: true,
+  },
+  {
+    path: '/404',
+    name: '404',
+    component: () => import('@/views/404.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/404',
+  },
 ];
 
 const router = createRouter({

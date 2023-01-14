@@ -44,7 +44,6 @@ export default defineComponent({
     }),
     handleLogin() {
       this.loginUser({ username: this.username, password: this.password });
-      this.readRole({ username: this.username });
       this.$router.push('/');
     },
   },
@@ -53,12 +52,9 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .login {
-  width: 100vw;
-  height: calc(100vh - 75px);
   &__container {
     padding: 15px;
-    margin: auto;
-    margin-top: 30px;
+    margin: 30px auto;
     width: 350px;
     height: 400px;
     border: 1px solid black;

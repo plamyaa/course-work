@@ -158,7 +158,6 @@ export default defineComponent({
     margin: auto;
     max-width: 1440px;
     width: 100%;
-    padding: 20px 120px;
     display: grid;
     grid-template-columns: 35% 65%;
     column-gap: 55px;

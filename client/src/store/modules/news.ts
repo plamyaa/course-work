@@ -6,6 +6,7 @@ import {
   DELETE_WITH_TOKEN,
 } from '@/api/axios-api';
 import { Module } from 'vuex';
+import pagination, { IPaginationState } from './pagination';
 
 export interface INewsItem {
   id: number;
@@ -21,15 +22,16 @@ export interface INewsItem {
 
 export interface INewsState {
   data: INewsItem[];
+  pagination: IPaginationState;
 }
+
+const state: INewsState = {
+  data: [] as INewsItem[],
+} as INewsState;
 
 const news: Module<INewsState, IState> = {
   namespaced: true,
-  state() {
-    return {
-      data: [] as INewsItem[],
-    };
-  },
+  state,
   getters: {
     getNews(state: INewsState) {
       return state.data;
@@ -48,13 +50,23 @@ const news: Module<INewsState, IState> = {
   },
   actions: {
     async read() {
-      const response = await GET('/api/news/');
-      this.commit('news/addNews', response.data);
+      const { data } = await GET('/api/news/');
+      this.commit('news/pagination/setTotalItems', data.count);
+      this.commit('news/addNews', data.results);
+      this.commit('setLoad', false);
+    },
+    async readPage(context, page: number) {
+      this.commit('setLoad', true);
+      // this.commit('news/addNews', data.results);
       this.commit('setLoad', false);
     },
     async readById(context, id: number) {
       const respnose = await GET(`/api/news/${id}/`);
       return respnose.data;
+    },
+    async readBySortingValue(context, sortingValue: string) {
+      const response = await GET(`/api/news/?${sortingValue}`);
+      return response.data;
     },
     async create(
       context,
@@ -92,6 +104,7 @@ const news: Module<INewsState, IState> = {
       this.dispatch('read');
     },
   },
+  modules: { pagination },
 };
 
 export default news;

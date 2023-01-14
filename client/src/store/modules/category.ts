@@ -38,8 +38,8 @@ const category: Module<ICategoryState, IState> = {
   },
   actions: {
     async read() {
-      const response = await GET('/api/category/');
-      this.commit('category/addCategory', response.data);
+      const { data } = await GET('/api/category/');
+      this.commit('category/addCategory', data.results);
     },
     async readById(context, id: number) {
       const respnose = await GET(`/api/category/${id}/`);
