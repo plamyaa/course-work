@@ -3,7 +3,7 @@ from collection.models import Collection
 from django.db import models
 from datetime import *
 from django.contrib.auth.models import User
-
+from simple_history.models import HistoricalRecords
 class News(models.Model):
   title = models.CharField(max_length=100)
   text = models.TextField()
@@ -13,6 +13,7 @@ class News(models.Model):
   brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, blank=True, null=True)
   collection = models.ForeignKey(Collection, on_delete=models.SET_NULL, blank=True, null=True)
   author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True) 
+  history = HistoricalRecords()
 
   def __str__(self):
     return self.title

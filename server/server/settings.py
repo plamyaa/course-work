@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework_simplejwt',
     'django_filters',
+    'import_export',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -46,6 +48,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware'
 ]
 
 CORS_ALLOWED_ORIGINS = [

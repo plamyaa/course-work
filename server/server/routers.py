@@ -1,5 +1,5 @@
 from rest_framework import routers
-from news.viewsets import NewsViewSet
+from news.viewsets import NewsViewSet, FilterBackend
 from collection.viewsets import CollectionViewSet
 from category.viewsets import CategoryViewSet
 from brand.viewsets import BrandViewSet
@@ -12,3 +12,4 @@ router.register(r'category', CategoryViewSet)
 router.register(r'brand', BrandViewSet)
 router.register(r'user', UserViewSet)
 router.register(r'group', GroupViewSet)
+# router.register(r'qnews', FilterBackend)
