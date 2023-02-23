@@ -49,6 +49,7 @@ export default defineComponent({
 
 <style lang="scss">
 .pagination-container {
+  margin-top: 15px;
   display: flex;
   column-gap: 10px;
 }

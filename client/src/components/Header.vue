@@ -9,6 +9,12 @@
         <router-link class="header__logo" to="/">SNEAKER FORCE</router-link>
       </TextWrapper>
       <nav class="header__nav">
+        <!-- <div class="header__search">
+          <input type="text" class="header__input" v-if="showInput" />
+          <button class="header__button" @click="toggleInput">
+            <img src="@/assets/find.svg" class="header__icon" />
+          </button>
+        </div> -->
         <TextWrapper
           class="header__text"
           :fontFamily="'libreFranklin'"
@@ -16,14 +22,6 @@
           :fontWeight="700"
         >
           <router-link class="header__link" to="/">Главная</router-link>
-        </TextWrapper>
-        <TextWrapper
-          class="header__text"
-          :fontFamily="'libreFranklin'"
-          :fontSize="14"
-          :fontWeight="700"
-        >
-          <a class="header__link" href="#">Новости</a>
         </TextWrapper>
 
         <TextWrapper
@@ -59,10 +57,19 @@ import { mapGetters, mapMutations } from 'vuex';
 
 export default defineComponent({
   name: 'MainHeader',
+  data() {
+    return {
+      showInput: false,
+      search: null,
+    };
+  },
   methods: {
     ...mapMutations({
       logout: 'user/logoutUser',
     }),
+    toggleInput() {
+      this.showInput = !this.showInput;
+    },
     handleAuth() {
       if (this.isAuth === true) {
         this.logout();
@@ -113,6 +120,27 @@ export default defineComponent({
   &__nav {
     display: flex;
     gap: 28px;
+    align-items: center;
+  }
+  &__search {
+    display: flex;
+    gap: 10px;
+  }
+  &__button {
+    height: 30px;
+    width: 30px;
+    border: 0;
+    background: transparent;
+    border-radius: 100%;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      background: #57471c32;
+    }
+  }
+  &__icon {
+    width: 25px;
+    height: 25px;
   }
   &__link {
     transition: 0.3s;
@@ -135,6 +163,8 @@ export default defineComponent({
 }
 @media (max-width: 768px) {
   .header__container {
+    flex-direction: column;
+    justify-content: space-around;
     padding: 0 50px;
   }
 }

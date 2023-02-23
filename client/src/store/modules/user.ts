@@ -6,6 +6,7 @@ import { POST, POST_WITH_TOKEN, GET_WITH_TOKEN } from '@/api/axios-api';
 export interface IUserState {
   isAuth: boolean;
   username: string;
+  user_id: number;
   role: number;
 }
 
@@ -15,6 +16,7 @@ const user: Module<IUserState, IState> = {
     return {
       isAuth: false,
       username: '',
+      user_id: 0,
       role: 100,
     };
   },
@@ -27,6 +29,9 @@ const user: Module<IUserState, IState> = {
     },
     getRole(state: IUserState) {
       return state.role;
+    },
+    getUserId(state: IUserState) {
+      return +state.user_id;
     },
   },
   mutations: {
@@ -45,8 +50,20 @@ const user: Module<IUserState, IState> = {
       });
       (state.role = 100), (state.isAuth = false), (state.username = '');
     },
+    setUserId(state: IUserState, id: number) {
+      state.user_id = id;
+    },
   },
   actions: {
+    async read(context, { username }: { username: string }) {
+      const { data } = await GET_WITH_TOKEN('/api/user/');
+      const userId = data.results.find(
+        (user: any) => user.username === username
+      ).id;
+      console.log(userId);
+      this.commit('user/setUserId', userId);
+      Cookies.set('userId', userId);
+    },
     async loginUser(
       context,
       { username, password }: { username: string; password: string }
@@ -55,11 +72,13 @@ const user: Module<IUserState, IState> = {
         username: username,
         password: password,
       });
+      Cookies.set('refreshToken', response?.data?.refresh);
+      Cookies.set('accessToken', response?.data?.access);
       Cookies.set('username', username);
-      Cookies.set('refreshToken', response.data.refresh);
-      Cookies.set('accessToken', response.data.access);
+
       this.dispatch('user/readRoleByUsername', { username: username });
       this.commit('user/setAuth', true);
+      this.dispatch('user/read', { username: username });
     },
     async registerUser(
       context,
@@ -84,7 +103,9 @@ const user: Module<IUserState, IState> = {
       });
       Cookies.set('accessToken', response.data.access);
       const username = Cookies.get('username');
-      if (username) {
+      const userId = Cookies.get('userId');
+      if (username && userId) {
+        this.commit('user/setUserId', userId);
         this.commit('user/setUsername', username);
         this.dispatch('user/readRoleByUsername', { username: username });
         this.commit('user/setAuth', true);

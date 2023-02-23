@@ -1,7 +1,7 @@
 <template>
   <div class="create-news">
     <div class="create-news__container">
-      <form class="create-news__form form" @submit.prevent="createNews">
+      <form class="create-news__form form" @submit.prevent>
         <TextWrapper
           :fontFamily="'libreFranklin'"
           :fontStyle="'italic'"
@@ -11,13 +11,13 @@
         </TextWrapper>
         <label class="form__label" for="title">
           <input
+            v-model="title"
             class="form__input"
             type="text"
             id="title"
             placeholder="Заголовок..."
             maxlength="100"
             required="true"
-            v-model="title"
           />
           <TextWrapper
             :fontFamily="'libreFranklin'"
@@ -29,23 +29,42 @@
         </label>
         <label class="form__label" for="title">
           <input
+            v-model="image_src"
             class="form__input"
             type="text"
             id="title"
             placeholder="Ссылка на главное изображение..."
             required="true"
-            v-model="image_src"
           />
         </label>
         <div class="form__selectors">
-          <select class="form__input">
-            <option>1</option>
-            <option>2</option>
-          </select>
-          <select class="form__input">
-            <option>1</option>
-            <option>2</option>
-          </select>
+          <label class="form__label">
+            <TextWrapper> Бренд: </TextWrapper>
+            <select class="form__input" required v-model="brand">
+              <option
+                v-for="{ id, brand } in brands"
+                :key="id"
+                :value="id"
+                :selected="id === brand"
+              >
+                {{ brand }}
+              </option>
+            </select>
+          </label>
+          <label class="form__label">
+            <TextWrapper> Коллекция: </TextWrapper>
+            <select class="form__input" required v-model="collection">
+              <option value="">Нет коллекции</option>
+              <option
+                v-for="{ id, collection } in collections"
+                :key="id"
+                :value="id"
+                :selected="id === collection"
+              >
+                {{ collection }}
+              </option>
+            </select>
+          </label>
         </div>
         <label class="form__label" for="title">
           <textarea
@@ -57,10 +76,10 @@
             v-model="text"
           />
         </label>
-        <MainButton v-if="id === 0" class="form__submit">
+        <MainButton v-if="id === 0" class="form__submit" @click="createNews">
           Создать новость
         </MainButton>
-        <MainButton v-else class="form__submit">
+        <MainButton v-else class="form__submit" @click="editNews">
           Редактивароать новость
         </MainButton>
       </form>
@@ -87,9 +106,10 @@ export default defineComponent({
     };
   },
   async mounted() {
-    const id = Number(this.$route.params.id);
+    const id = +this.$route.params.id;
     if (!id) return;
-    const news = this.getNewsById(id);
+    let news = this.getNewsById(id);
+    if (!news) news = await this.newsById(id);
     const { title, text, image_src, collection, brand } = news;
     this.id = id;
     this.title = title;
@@ -100,7 +120,10 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
+      userId: 'user/getUserId',
       getNewsById: 'news/getNewsById',
+      brands: 'brand/getBrand',
+      collections: 'collection/getCollection',
     }),
     titleLen(): number {
       return this.title.length;
@@ -119,8 +142,8 @@ export default defineComponent({
   methods: {
     ...mapActions({
       addNews: 'news/create',
-      getNews: 'news/readById',
       updateNews: 'news/update',
+      newsById: 'news/readById',
     }),
     createNews() {
       if (this.isFieldsHasEmpty) return;
@@ -128,6 +151,9 @@ export default defineComponent({
         title: this.title,
         text: this.text,
         image_src: this.image_src,
+        brand: this.brand,
+        collection: this.collection,
+        author: this.userId,
       });
       this.$router.push('/');
     },
@@ -135,9 +161,13 @@ export default defineComponent({
       if (this.isFieldsHasEmpty) return;
       this.updateNews({
         id: this.id,
-        title: this.title,
-        text: this.text,
-        image_src: this.image_src,
+        payload: {
+          title: this.title,
+          text: this.text,
+          image_src: this.image_src,
+          brand: this.brand,
+          collection: this.collection,
+        },
       });
       this.$router.push('/');
     },
@@ -207,5 +237,11 @@ export default defineComponent({
       color: #1111117a;
     }
   }
+}
+.form__selectors .form__label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
 }
 </style>

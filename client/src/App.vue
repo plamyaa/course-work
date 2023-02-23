@@ -20,10 +20,11 @@ export default defineComponent({
   name: 'App',
   async mounted() {
     this.setLoad(true);
-    this.fetchNews();
+    this.refreshToken();
+    this.fetchAuthors();
     this.fetchBrands();
     this.fetchCollections();
-    this.refreshToken();
+    this.fetchNews();
   },
   methods: {
     ...mapMutations({ setLoad: 'setLoad' }),
@@ -32,6 +33,7 @@ export default defineComponent({
       fetchNews: 'news/read',
       fetchBrands: 'brand/read',
       fetchCollections: 'collection/read',
+      fetchAuthors: 'author/read',
     }),
   },
   computed: {

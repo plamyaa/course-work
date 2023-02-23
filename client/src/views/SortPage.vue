@@ -1,12 +1,3 @@
-<script lang="ts">
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { GET } from '@/api/axios-api';
-import MainCard from '@/components/MainCard.vue';
-import MainPagination from '@/components/UI/MainPagination.vue';
-export default { name: 'SortPage' };
-</script>
-
 <template>
   <div class="sort-page">
     <div class="sort-page__container">
@@ -14,50 +5,69 @@ export default { name: 'SortPage' };
         Здесь пока ничего нет...
       </TextWrapper>
       <MainCard
-        v-for="{
-          id,
-          title,
-          text,
-          image_src,
-          brand_id,
-          author_id,
-          collection_id,
-        } in cards"
-        :key="id"
-        :id="id"
-        :title="title"
-        :text="text"
-        :image_src="image_src"
-        :brand_id="brand_id"
-        :author_id="author_id"
-        :collection_id="collection_id"
+        v-for="card in cards"
+        :key="card.id"
+        :id="card.id"
+        :title="card.title"
+        :text="card.text"
+        :image_src="card.image_src"
+        :brand="card.brand"
+        :author="card.author"
       />
     </div>
-    <div class="sort-page__pagination">
-      <MainPagination :totalItems="totalItems" :itemsPerPage="itemsPerPage" />
+    <div class="sort-page__pagination" v-if="totalItems > itemsPerPage">
+      <MainPagination
+        :page="page"
+        :totalItems="totalItems"
+        :itemsPerPage="itemsPerPage"
+        @changePage="changePage"
+      />
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-const route = useRoute();
-const cards = ref([]);
-const totalItems = ref(0);
-const itemsPerPage = ref(10);
-onMounted(async () => {
-  const { data } = await GET(
-    `/api/news/?${route.name as string}_id=${route.params.id}`
-  );
-  console.log(data);
-  totalItems.value = data.count;
-  cards.value = data.results;
+<script lang="ts">
+import { GET } from '../api/axios-api';
+import MainCard from '../components/MainCard.vue';
+import MainPagination from '../components/UI/MainPagination.vue';
+import { defineComponent } from '@vue/runtime-core';
+import { INewsItem } from '../store/modules/news';
+export default defineComponent({
+  name: 'SortPage',
+  components: {
+    MainCard,
+    MainPagination,
+  },
+  data() {
+    return {
+      cards: [] as INewsItem[],
+      page: 1,
+      totalItems: 0,
+      itemsPerPage: 6,
+      url: '',
+    };
+  },
+  methods: {
+    async changePage(page: number) {
+      const { data } = await GET(this.url + '&page=' + page);
+      this.cards = data.results;
+    },
+  },
+  async mounted() {
+    this.url = `/api/news/?${this.$route.name as string}=${
+      this.$route.params.id
+    }`;
+    const { data } = await GET(this.url);
+    this.totalItems = data.count;
+    this.itemsPerPage = data.page_size;
+    this.page = data.current;
+    this.cards = data.results;
+  },
 });
 </script>
 
 <style lang="scss" scoped>
 .sort-page {
-  &__pagination {
-  }
   &__container {
     display: grid;
     grid-template-rows: auto auto;

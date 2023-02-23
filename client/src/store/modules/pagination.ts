@@ -1,10 +1,5 @@
 import { IState } from './../index';
-import {
-  POST_WITH_TOKEN,
-  GET,
-  PUT_WITH_TOKEN,
-  DELETE_WITH_TOKEN,
-} from '@/api/axios-api';
+import { GET } from '@/api/axios-api';
 import { Module } from 'vuex';
 
 export interface IPaginationState {
@@ -18,7 +13,7 @@ const pagination: Module<IPaginationState, IState> = {
   state() {
     return {
       totalItems: 0,
-      itemsPerPage: 5,
+      itemsPerPage: 1,
       page: 1,
     };
   },
@@ -32,10 +27,28 @@ const pagination: Module<IPaginationState, IState> = {
     getPage(state: IPaginationState) {
       return state.itemsPerPage;
     },
+    getShowPagination(state: IPaginationState) {
+      return state.totalItems > state.itemsPerPage;
+    },
   },
   mutations: {
+    setPagination(
+      state: IPaginationState,
+      {
+        count,
+        page_size,
+        page,
+      }: { count: number; page_size: number; page: number }
+    ) {
+      state.totalItems = count;
+      state.itemsPerPage = page_size;
+      state.page = page;
+    },
     setTotalItems(state: IPaginationState, count: number) {
       state.totalItems = count;
+    },
+    setItemsPerPage(state: IPaginationState, value: number) {
+      state.itemsPerPage = value;
     },
     setPage(state: IPaginationState, page: number) {
       state.page = page;
@@ -51,7 +64,8 @@ const pagination: Module<IPaginationState, IState> = {
       }: { entity: string; endPoint: string; page: number }
     ) {
       this.commit(entity + '/pagination/setPage', page);
-      const { data } = await GET(endPoint + '?p=' + page);
+      const { data } = await GET(endPoint + '?page=' + page);
+      console.log(data);
       return data.results;
     },
   },

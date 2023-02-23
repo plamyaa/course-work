@@ -15,9 +15,27 @@ export interface INewsItem {
   image_src: string;
   publish_date: Date;
   update_date: Date;
-  collection_id: string;
-  brand_id: string;
-  author_id: string;
+  collection: string;
+  brand: string;
+  author: string;
+}
+
+interface ICreatePayload {
+  title: string;
+  text: string;
+  image_src: string;
+  author: number;
+  brand: number;
+  collection: number;
+}
+
+interface IUpdatePayload {
+  title: string;
+  text: string;
+  image_src: string;
+  author: number;
+  brand: number;
+  collection: number;
 }
 
 export interface INewsState {
@@ -25,7 +43,7 @@ export interface INewsState {
   pagination: IPaginationState;
 }
 
-const state: INewsState = {
+const state = {
   data: [] as INewsItem[],
 } as INewsState;
 
@@ -51,8 +69,12 @@ const news: Module<INewsState, IState> = {
   actions: {
     async read() {
       const { data } = await GET('/api/news/');
-      this.commit('news/pagination/setTotalItems', data.count);
       this.commit('news/addNews', data.results);
+      this.commit('news/pagination/setPagination', {
+        count: data.count,
+        page_size: data.page_size,
+        page: data.current,
+      });
       this.commit('setLoad', false);
     },
     async readPage(context, page: number) {
@@ -68,40 +90,20 @@ const news: Module<INewsState, IState> = {
       const response = await GET(`/api/news/?${sortingValue}`);
       return response.data;
     },
-    async create(
-      context,
-      {
-        title,
-        text,
-        image_src,
-      }: { title: string; text: string; image_src: string }
-    ) {
-      POST_WITH_TOKEN(`/api/news/`, {
-        title: title,
-        text: text,
-        image_src: image_src,
-      });
-      this.dispatch('read');
+    async create(context, payload: ICreatePayload) {
+      await POST_WITH_TOKEN(`/api/news/`, payload);
+      this.dispatch('news/read');
     },
     async update(
       context,
-      {
-        id,
-        title,
-        text,
-        image_src,
-      }: { id: number; title: string; text: string; image_src: string }
+      { id, payload }: { id: number; payload: IUpdatePayload }
     ) {
-      PUT_WITH_TOKEN(`/api/news/${id}/`, {
-        title: title,
-        text: text,
-        image_src: image_src,
-      });
-      this.dispatch('read');
+      await PUT_WITH_TOKEN(`/api/news/${id}/`, payload);
+      this.dispatch('news/read');
     },
     async delete(context, id: number) {
-      DELETE_WITH_TOKEN(`/api/news/${id}/`);
-      this.dispatch('read');
+      await DELETE_WITH_TOKEN(`/api/news/${id}/`);
+      this.dispatch('news/read');
     },
   },
   modules: { pagination },

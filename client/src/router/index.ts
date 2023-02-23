@@ -52,6 +52,12 @@ const routes: Array<RouteRecordRaw> = [
     props: true,
   },
   {
+    path: '/author/:id',
+    name: 'author',
+    component: () => import('@/views/SortPage.vue'),
+    props: (route) => ({ query: route.query.q }),
+  },
+  {
     path: '/404',
     name: '404',
     component: () => import('@/views/404.vue'),

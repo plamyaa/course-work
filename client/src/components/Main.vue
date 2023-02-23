@@ -9,11 +9,11 @@
           :title="item.title"
           :text="item.text"
           :image_src="item.image_src"
-          :brand_id="item.brand_id"
-          :author_id="item.author_id"
+          :brand="item.brand"
+          :author="item.author"
         />
       </div>
-      <div>
+      <div v-if="showPagination">
         <MainPagination
           :page="page"
           :totalItems="totalItems"
@@ -40,6 +40,7 @@ export default defineComponent({
       page: 'news/pagination/getPage',
       totalItems: 'news/pagination/getTotalItems',
       itemsPerPage: 'news/pagination/getItemsPerPage',
+      showPagination: 'news/pagination/getShowPagination',
     }),
   },
   methods: {
@@ -55,8 +56,6 @@ export default defineComponent({
         endPoint: '/api/news/',
         page: page,
       });
-      this.$el.scrollTop = 0;
-      console.log(response);
       this.setNews(response);
     },
   },

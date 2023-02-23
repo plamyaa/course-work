@@ -41,10 +41,11 @@ export default defineComponent({
       image_src: '',
     };
   },
-  mounted() {
-    const id = Number(this.$route.params.id);
+  async mounted() {
+    const id = +this.$route.params.id;
     if (!id) return;
-    const news = this.getNewsById(id);
+    let news = this.getNewsById(id);
+    if (!news) news = await this.newsById(id);
     const { title, text, image_src } = news;
     this.id = id;
     this.title = title;
@@ -52,7 +53,11 @@ export default defineComponent({
     this.image_src = image_src;
   },
   methods: {
-    ...mapActions({ deleteNews: 'news/delete' }),
+    ...mapActions({
+      deleteNews: 'news/delete',
+      readNews: 'news/read',
+      newsById: 'news/readById',
+    }),
     editNews() {
       this.$router.push('/newsEdit/' + this.id);
     },
@@ -60,6 +65,7 @@ export default defineComponent({
       const answer = confirm('Вы уверены, что хотите удалить новость?');
       if (answer) {
         this.deleteNews(this.id);
+        this.$router.push('/');
       }
     },
   },

@@ -4,6 +4,7 @@ import brand, { IBrandState } from './modules/brand';
 import collection, { ICollectionState } from './modules/collection';
 import category, { ICategoryState } from './modules/category';
 import user, { IUserState } from './modules/user';
+import author, { IAuthorState } from './modules/author';
 
 export interface IState {
   loaded: boolean;
@@ -12,6 +13,7 @@ export interface IState {
   collection: ICollectionState;
   category: ICategoryState;
   user: IUserState;
+  author: IAuthorState;
 }
 
 export default createStore({
@@ -28,5 +30,5 @@ export default createStore({
       state.loaded = load;
     },
   },
-  modules: { news, collection, brand, category, user },
+  modules: { news, collection, brand, category, user, author },
 });

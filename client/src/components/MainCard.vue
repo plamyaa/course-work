@@ -6,29 +6,34 @@
       @click="openNews"
       :style="{ height: style.height }"
     />
-    <TextWrapper
-      :fontFamily="'libreFranklin'"
-      :fontSize="10"
-      :fontStyle="'italic'"
-      :fontWeight="700"
-      :color="style.color"
-    >
-      <router-link :to="`/brand/${id}`" class="card__link">
-        {{ getBrandById(brand_id) }}
-      </router-link>
-    </TextWrapper>
+    <div class="card__links">
+      <TextWrapper
+        :fontFamily="'libreFranklin'"
+        :fontSize="10"
+        :fontStyle="'italic'"
+        :fontWeight="700"
+        :color="style.color"
+      >
+        <router-link :to="`/brand/${brand}`" class="card__link">
+          {{ getBrandById(brand) }}
+        </router-link>
+      </TextWrapper>
+      <TextWrapper
+        :fontFamily="'libreFranklin'"
+        :fontSize="10"
+        :fontStyle="'italic'"
+        :fontWeight="700"
+        :color="style.color"
+      >
+        <router-link :to="`/author/${author}`" class="card__link">
+          {{ getAuthorById(author) }}
+        </router-link>
+      </TextWrapper>
+    </div>
     <TextWrapper :fontFamily="'tenorSans'" :color="style.color">
-      <router-link class="card__link" :to="`newsPage/${id}`">
+      <router-link :to="`/newsPage/${id}`" class="card__link">
         {{ title }}
       </router-link>
-    </TextWrapper>
-    <TextWrapper
-      :fontFamily="'libreFranklin'"
-      :fontSize="10"
-      :fontStyle="'italic'"
-      :color="style.color"
-    >
-      <router-link :to="`/author/${id}`">{{ author_id }}</router-link>
     </TextWrapper>
   </div>
 </template>
@@ -44,14 +49,13 @@ export default defineComponent({
     title: String,
     text: String,
     image_src: String,
-    brand_id: Number,
-    author_id: Number,
+    brand: Number,
+    author: Number,
     color: String,
     imageHeight: String,
   },
   data() {
     return {
-      author: '',
       style: {
         height: this.imageHeight ?? '255px',
         color: this.color ?? null,
@@ -65,7 +69,10 @@ export default defineComponent({
     },
   },
   computed: {
-    ...mapGetters({ getBrandById: 'brand/getBrandById' }),
+    ...mapGetters({
+      getBrandById: 'brand/getBrandById',
+      getAuthorById: 'author/getAuthorById',
+    }),
   },
 });
 </script>
@@ -80,6 +87,10 @@ export default defineComponent({
     cursor: pointer;
     height: 255px;
     object-fit: cover;
+  }
+  &__links {
+    display: flex;
+    justify-content: space-between;
   }
   &__link {
     text-decoration: none;

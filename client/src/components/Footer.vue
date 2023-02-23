@@ -19,8 +19,8 @@
             :title="lastNews.title"
             :text="lastNews.text"
             :image_src="lastNews.image_src"
-            :brand_id="lastNews.brand_id"
-            :author_id="lastNews.author_id"
+            :brand="lastNews.brand"
+            :author="lastNews.author"
             :color="'#fff'"
             :imageHeight="'50%'"
           />
@@ -97,17 +97,26 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
+import { GET } from '../api/axios-api';
 import MainCard from './MainCard.vue';
 
 export default defineComponent({
   name: 'MainFooter',
   components: { MainCard },
+  data() {
+    return {
+      lastNews: {},
+    };
+  },
   computed: {
     ...mapGetters({
-      lastNews: 'news/getLastNews',
       brandsLen: 'brand/getBrandByLength',
       collectionsLen: 'collection/getCollectionByLength',
     }),
+  },
+  async mounted() {
+    const { data } = await GET('api/news/last/');
+    this.lastNews = data;
   },
 });
 </script>
